@@ -11,7 +11,7 @@ void handle_syscall_enter(tracee *ctx) {
 			buf = malloc(ctx->regs.rdx + 1);
 			ptrace_peek(ctx->pid, (addr_t)ctx->regs.rsi, buf, (int)ctx->regs.rdx);
 			buf[ strlen(buf) ] = '\0';
-			write(1, buf, count);
+			write(1, buf, strlen(buf));
 			free(buf);
 			break;
 	}
