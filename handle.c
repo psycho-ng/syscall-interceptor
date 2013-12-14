@@ -15,7 +15,7 @@ void handle_syscall_enter(tracee *ctx) {
 			free(buf);
 			break;
 	}
-	ctx->in_syscall = 0;	
+	ctx->in_syscall = 0;
 };
 
 void handle_syscall_exit(tracee *ctx) {
