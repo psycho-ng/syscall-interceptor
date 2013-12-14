@@ -15,7 +15,6 @@ void ptrace_detach(pid_t pid) {
 };
 
 void ptrace_setopts(pid_t pid) {
-	printf("pizda gnili: %d\n", pid);
 	if( ptrace(PTRACE_SETOPTIONS, pid, NULL, PTRACE_O_TRACEEXEC|PTRACE_O_TRACESYSGOOD|PTRACE_O_TRACECLONE|PTRACE_O_TRACEFORK|PTRACE_O_TRACEVFORK) == -1 ) {
 		perror("ptrace_setopts()");
 		exit(1);
