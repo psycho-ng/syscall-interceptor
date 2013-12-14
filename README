@@ -1,0 +1,8 @@
+Yeah-yeah, I know we can manipulate strace(1) output by shell built-in/awk/whatever-wrapper.
+But we cann't do shit with strace if viewing syscall is not enought.
+
+I've implemented pretty simple functions allowing to inject befor and after syscall => fully control execution flow.
+See handle.c for details.
+
+btw there's surely uncaught cases of wait4 in log.c which can lead to WTF's.
+I'm NOT gonna fix that in the near future.
