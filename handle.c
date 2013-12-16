@@ -3,7 +3,7 @@
 
 void handle_syscall_enter(struct child *ctx) {
 	ptrace_getregs(ctx);
-// printf("[%d]> entering syscall #%d\n", ctx->pid, (int)GET_SYSORIG(ctx->regs));
+//	printf("[%d]> entering syscall #%d\n", ctx->pid, (int)GET_SYSORIG(ctx->regs));
 
 	ctx->sys_args = NULL;
 	int sc = GET_SYSORIG(ctx->regs);
@@ -23,18 +23,13 @@ void handle_syscall_enter(struct child *ctx) {
 		case __NR_read: {
 			break;
 		}
-		case __NR_waitpid:
-		case __NR_wait4:
-		case __NR_waitid:
-			ctx->follow_child = 1;
-			break;
 	}
 	ctx->in_syscall = 0;
 };
 
 void handle_syscall_exit(struct child *ctx) {
 	ptrace_getregs(ctx);
-//	printf("[%d]> exiting syscall #%d, ret = %d\n", ctx->pid, (int)GET_SYSORIG(ctx->regs), (int)GET_SYSARG0(ctx->regs));
+//	printf("[%d]> exiting syscall #%d, ret = %lx\n", ctx->pid, (int)GET_SYSORIG(ctx->regs), (long unsigned int)GET_SYSARG0(ctx->regs));
 	int sc = GET_SYSORIG(ctx->regs);	
 	
 	switch(sc) {

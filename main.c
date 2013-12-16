@@ -17,7 +17,6 @@ int main(int argc,char **argv) {
 	c->prev = c->next = NULL;
 	c->pid = ctx->master = atoi(argv[1]);
 	c->in_syscall = 1;
-	c->follow_child = 0;
 	sigemptyset(&empty_mask);
 
 	/* trace */
@@ -28,11 +27,12 @@ int main(int argc,char **argv) {
 		sigprocmask(SIG_SETMASK, &empty_mask, NULL);
 		ptrace_syscall(c->pid);
 		w_pid = wait4(-1, &status, __WALL, rup);
+//		printf("wait4(-1, ...) = %d\n", w_pid);
 
 		if( find_child(c, w_pid) == NULL ) /* new clone() */
 			c = new_child(c, w_pid);
-
-		c->pid = w_pid;
+		else
+			c = find_child(c, w_pid);
 
 		if( errno == ECHILD ) continue;
 

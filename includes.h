@@ -25,7 +25,6 @@ struct child {
 	pid_t pid;
 	unsigned int event;
 	char in_syscall;
-	char follow_child;
 	addr_t *sys_args;
 	struct user_regs_struct regs;
 	struct child *prev;
