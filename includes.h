@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
 #include <errno.h>
 #include <sys/types.h>
@@ -17,20 +18,33 @@ typedef unsigned char uint8_t;
 
 typedef struct {
 	pid_t master;
+	struct child *child;
+} tracee;
+
+struct child {
 	pid_t pid;
 	unsigned int event;
 	char in_syscall;
+	char follow_child;
+	addr_t *sys_args;
 	struct user_regs_struct regs;
-} tracee;
+	struct child *prev;
+	struct child *next;
+};
 
 void ptrace_attach(pid_t pid);
 void ptrace_detach(pid_t pid);
 void ptrace_syscall(pid_t pid);
 void ptrace_setopts(pid_t pid);
-void ptrace_getregs(tracee *ctx);
+void ptrace_getregs(struct child *ctx);
 void ptrace_peek(pid_t pid, addr_t addr, void *ptr, int len);
 addr_t ptrace_peekuser(pid_t pid, int reg_offset);
-void handle_syscall_enter(tracee *ctx);
-void handle_syscall_exit(tracee *ctx);
-void handle_syscall(tracee *ctx);
-void handle_event(tracee *ctx, unsigned int event);
+void handle_syscall_enter(struct child *ctx);
+void handle_syscall_exit(struct child *ctx);
+void handle_syscall(struct child *ctx);
+void handle_event(struct child *ctx, unsigned int event);
+struct child *new_child(struct child *current, pid_t pid);
+struct child *first_child(struct child *current);
+struct child *last_child(struct child *current);
+struct child *find_child(struct child *current, pid_t pid);
+void c_dup(struct child *c);

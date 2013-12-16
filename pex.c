@@ -36,7 +36,7 @@ void ptrace_peek(pid_t pid, addr_t addr, void *ptr, int len) {
 	}
 };
 
-void ptrace_getregs(tracee *ctx) {
+void ptrace_getregs(struct child *ctx) {
 	if( (ptrace(PTRACE_GETREGS, ctx->pid, NULL, &ctx->regs)) == -1 ) {
 		perror("ptrace_getregs()");
 		exit(1);
