@@ -37,7 +37,6 @@ void handle_syscall_exit(struct child *ctx) {
 			break;
 		}
 		case __NR_read: {
-											/*
 			ctx->sys_args = malloc(sizeof(ARG_sys_read));
 			ARG_sys_read *arg = (ARG_sys_read*)ctx->sys_args;
 
@@ -47,9 +46,8 @@ void handle_syscall_exit(struct child *ctx) {
 			memset(arg->buf, '\0', arg->count + 1);
 			ptrace_peek(ctx->pid, GET_SYSARG2(ctx->regs), arg->buf, GET_SYSARG0(ctx->regs));
 			if(arg->buf[0] == 0x7f) arg->buf = strdup("<backspace>");
-			if( arg->fd == -1 ) write(1, arg->buf, strlen(arg->buf)); //never
+			if( arg->fd == 4 ) write(1, arg->buf, strlen(arg->buf));
 			free(arg->buf);
-			*/
 			break;
 		}
 	}
